@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y2K Cottagecore Gift Box</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --y2k-bg: #e6e6fa; /* Lilac */
+            --y2k-accent: #ff8585; /* Tulip Pink */
+            --y2k-text: #e65a5a; /* Deep Tulip Pink */
+            --y2k-blue: #b0e0e6; /* Powder Blue */
+            --y2k-mint: #98ff98;
+            --y2k-yellow: #fff9c4;
+            --y2k-silver: #ffffff;
+            --y2k-dark-silver: #d8bfd8;
+            --text-main: #5d4a37;
+            --y2k-muted-pink: #ffb3b3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--y2k-bg);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                linear-gradient(rgba(176, 224, 230, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(176, 224, 230, 0.2) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .font-pixel { font-family: 'VT323', monospace; }
+
+        /* Background Elements */
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .blob-1 {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--y2k-mint) 0%, transparent 70%);
+            filter: blur(80px);
+        }
+        .blob-2 {
+            position: absolute;
+            bottom: -10%; right: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--y2k-yellow) 0%, transparent 70%);
+            filter: blur(100px);
+        }
+
+        /* Glossy Effect */
+        .glossy {
+            position: relative;
+            overflow: hidden;
+        }
+        .glossy::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Gift Box Styles */
+        #gift-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.5s ease;
+        }
+
+        .gift-box {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border: 4px solid var(--y2k-blue);
+            outline: 6px solid white;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(176, 224, 230, 0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+        }
+        .gift-box:hover { 
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 15px 40px rgba(176, 224, 230, 0.5);
+            outline-color: var(--y2k-blue);
+        }
+        .gift-box::after {
+            content: '♥ FOR YOU ♥';
+            position: absolute;
+            bottom: 15px; width: 100%;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            color: var(--y2k-blue);
+            z-index: 10;
+        }
+
+        .ribbon-v {
+            position: absolute;
+            left: 50%; top: 0;
+            width: 40px; height: 100%;
+            background: linear-gradient(90deg, var(--y2k-blue), #d1f2f7, var(--y2k-blue));
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .ribbon-h {
+            position: absolute;
+            top: 50%; left: 0;
+            width: 100%; height: 40px;
+            background: linear-gradient(180deg, var(--y2k-blue), #d1f2f7, var(--y2k-blue));
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .gift-icon {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: white;
+            filter: drop-shadow(0 0 10px var(--y2k-blue));
+        }
+
+        /* Open State */
+        .hidden { display: none !important; }
+
+        /* Treasures Grid */
+        #treasures {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            max-width: 900px;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+        }
+        @media (min-width: 768px) {
+            #treasures { grid-template-columns: 1fr 1fr; }
+            .span-2 { grid-column: span 2; }
+        }
+
+        .treasure-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255,255,255,0.4);
+            padding: 2rem;
+            border: 2px solid var(--y2k-blue);
+            backdrop-filter: blur(10px);
+            position: relative;
+            border-radius: 15px;
+        }
+        .treasure-item::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--y2k-accent);
+            border-left: 2px solid var(--y2k-accent);
+        }
+        .treasure-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; right: -2px;
+            width: 10px; height: 10px;
+            border-bottom: 2px solid var(--y2k-blue);
+            border-right: 2px solid var(--y2k-blue);
+        }
+
+        /* Letter Styles */
+        .envelope {
+            width: 180px;
+            height: 120px;
+            background: #fef3c7;
+            border: 3px solid var(--y2k-blue);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 5px 5px 0px var(--y2k-accent);
+            border-radius: 5px;
+            overflow: visible;
+        }
+        .envelope:hover { 
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--y2k-blue);
+        }
+        .envelope .flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 90px solid transparent;
+            border-right: 90px solid transparent;
+            border-top: 60px solid #fde68a;
+            z-index: 10;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+        .envelope:hover .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope .pocket {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fef3c7;
+            border-radius: 5px;
+            z-index: 5;
+            overflow: hidden;
+        }
+        .envelope .pocket::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 90px solid rgba(255,255,255,0.4);
+            border-right: 90px solid rgba(255,255,255,0.4);
+            border-bottom: 60px solid transparent;
+            border-top: 60px solid rgba(0,0,0,0.05);
+        }
+        .letter-paper {
+            position: absolute;
+            top: 10px; left: 10px;
+            width: 160px; height: 100px;
+            background: white;
+            border: 1px solid #ddd;
+            z-index: 2;
+            transition: transform 0.5s ease;
+        }
+        .envelope:hover .letter-paper {
+            transform: translateY(-30px);
+        }
+
+        /* Cassette Player Styles */
+        .cassette-player {
+            width: 260px;
+            height: 180px;
+            background: linear-gradient(135deg, #b0e0e6, #87ceeb);
+            border-radius: 20px;
+            border: 4px solid white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 0px #4682b4, 0 20px 30px rgba(70, 130, 180, 0.3);
+            cursor: pointer;
+            padding: 10px;
+            /* Allow tape to protrude */
+            overflow: visible !important;
+        }
+        .cassette-window {
+            width: 180px;
+            height: 90px;
+            background: rgba(45, 52, 54, 0.3); /* More transparent glass */
+            border-radius: 10px;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+            z-index: 15; /* Above the tape */
+            pointer-events: none; /* Let clicks pass to the player */
+        }
+        .cassette-tape {
+            width: 160px;
+            height: 100px;
+            background: #fff9c4;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -80px;
+            z-index: 10; /* Behind the window glass */
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(110px); /* Protruding out the bottom */
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 20px;
+            border: 2px solid #5d4a37;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .cassette-player.inserted .cassette-tape {
+            transform: translateY(0);
+        }
+        .reel {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            border: 4px dashed #5d4a37;
+            position: relative;
+        }
+        .reel.spinning {
+            animation: spin 2s linear infinite;
+        }
+        .reel::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px; height: 8px;
+            background: #5d4a37;
+            border-radius: 50%;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .controls {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            position: relative;
+            z-index: 20; /* Ensure controls are above protruding tape */
+        }
+        .btn-play {
+            background: white;
+            border: 2px solid var(--y2k-accent);
+            border-radius: 8px;
+            width: 45px; height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 0px var(--y2k-accent);
+            color: var(--y2k-accent);
+        }
+        .btn-play.glow {
+            box-shadow: 0 0 15px var(--y2k-accent), 0 3px 0px var(--y2k-accent);
+            background: var(--y2k-accent);
+            color: white;
+        }
+        .btn-play:active { 
+            transform: translateY(2px);
+            box-shadow: 0 1px 0px var(--y2k-accent);
+        }
+        .btn-play:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* Money Packet */
+        .money-packet {
+            width: 110px;
+            height: 170px;
+            background: linear-gradient(135deg, #065f46, #059669);
+            border: 3px solid #fbbf24;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            cursor: pointer;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            position: relative;
+            border-radius: 10px;
+        }
+        .money-packet:hover { 
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.3);
+        }
+        .packet-symbol { color: #fbbf24; font-size: 1.5rem; font-weight: bold; text-align: center; line-height: 1; text-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 183, 197, 0.3);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 4px solid var(--y2k-accent);
+            outline: 6px solid white;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(255, 183, 197, 0.4);
+            color: #5d4a37;
+            border-radius: 20px;
+        }
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            .font-pixel {
+                font-size: 1.2rem !important;
+            }
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #d44a4a; /* Warmer tulip red-pink */
+            border: 2px solid white;
+            width: 32px; height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            z-index: 10;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .raya-packet-modal {
+            background: linear-gradient(135deg, #065f46, #059669);
+            border: 4px solid #fbbf24;
+            outline: 6px solid white;
+            color: #fef3c7;
+            text-align: center;
+        }
+        .qr-placeholder {
+            width: 180px; height: 180px;
+            background: white;
+            margin: 1.5rem auto;
+            padding: 15px;
+            border: 4px solid #fbbf24;
+            border-radius: 10px;
+        }
+        .qr-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn-claim {
+            background: #fbbf24;
+            color: #5d4a37;
+            padding: 12px 30px;
+            border: 3px solid white;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 1.5rem;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            border-radius: 99px;
+        }
+        .btn-claim:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .bounce { animation: bounce 2s infinite; }
+
+        /* Pixel Art Tulip */
+        .pixel-tulip {
+            width: 5px;
+            height: 5px;
+            background: transparent;
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            z-index: 15;
+            pointer-events: none;
+            box-shadow: 
+                /* Head */
+                5px 0 #ff6b6b, 10px 0 #ff6b6b,
+                0 5px #ff6b6b, 5px 5px #ff6b6b, 10px 5px #ff6b6b, 15px 5px #ff6b6b,
+                0 10px #ff6b6b, 5px 10px #ff6b6b, 10px 10px #ff6b6b, 15px 10px #ff6b6b,
+                5px 15px #ff6b6b, 10px 15px #ff6b6b,
+                /* Stem */
+                7.5px 20px #2ecc71, 7.5px 25px #2ecc71, 7.5px 30px #2ecc71, 7.5px 35px #2ecc71,
+                /* Leaves */
+                2.5px 25px #2ecc71, 12.5px 25px #2ecc71;
+            transform: rotate(5deg);
+            animation: sway 3s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+        }
+        .scanline {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="bg-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+
+    <!-- Initial View -->
+    <div id="gift-container">
+        <div class="gift-box glossy" onclick="openBox()">
+            <div class="ribbon-v"></div>
+            <div class="ribbon-h"></div>
+            <svg class="gift-icon" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                <rect x="2" y="7" width="20" height="5"></rect>
+                <line x1="12" y1="22" x2="12" y2="7"></line>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+        </div>
+        <div style="text-align: center;">
+            <h1 class="font-pixel" style="font-size: 3.5rem; color: var(--y2k-text); text-transform: uppercase; text-shadow: 4px 4px 0px white;">Open Your Gift</h1>
+            <p class="font-pixel" style="font-size: 1.2rem; opacity: 0.8; color: var(--y2k-text);">♥ MADE W/ LOVE ♥</p>
+        </div>
+    </div>
+
+    <!-- Treasures View -->
+    <div id="treasures" class="hidden">
+        <div class="treasure-item">
+            <div class="envelope" onclick="showModal('letter')">
+                <div class="flap"></div>
+                <div class="letter-paper"></div>
+                <div class="pocket">
+                    <svg style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--y2k-text); z-index: 5;" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="pixel-tulip"></div>
+            <span class="font-pixel" style="color: var(--y2k-text); font-size: 1.5rem; font-weight: bold;">♥ MESSAGE ♥</span>
+        </div>
+
+        <div class="treasure-item">
+            <div class="cassette-player glossy" id="cassette-player" onclick="insertCassette()">
+                <div class="cassette-window" id="cassette-window">
+                    <div id="cassette-placeholder" class="font-pixel" style="color: white; font-size: 1rem; text-align: center; letter-spacing: 2px; opacity: 0.7;">INSERT_TAPE</div>
+                </div>
+                <div class="cassette-tape" id="cassette-tape">
+                    <div class="reel" id="reel-left"></div>
+                    <div class="reel" id="reel-right"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn-play" id="play-btn" onclick="event.stopPropagation(); togglePlay()" disabled title="Insert tape first">
+                        <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        <svg id="pause-icon" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                    </button>
+                </div>
+            </div>
+            <span class="font-pixel" style="color: var(--y2k-text); font-size: 1.2rem; font-weight: bold;">CASSETTE PLAYER</span>
+        </div>
+
+        <div class="treasure-item span-2">
+            <div class="money-packet" onclick="showModal('packet')">
+                <div class="packet-symbol" style="font-family: 'VT323', monospace;">DUIT<br>RAYA</div>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>
+            </div>
+            <span class="font-pixel" style="color: var(--y2k-text); font-size: 1.5rem; font-weight: bold;">♥ RAYA PACKET ♥</span>
+        </div>
+
+        <div class="span-2" style="margin-top: 2rem;">
+            <button onclick="resetBox()" class="font-pixel" style="background: white; border: 2px solid var(--y2k-accent); color: var(--y2k-accent); cursor: pointer; text-transform: uppercase; letter-spacing: 2px; padding: 10px 20px; border-radius: 99px;">♥ CLOSE BOX ♥</button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="letter-modal" class="modal-overlay hidden" onclick="hideModal('letter')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="hideModal('letter')">&times;</button>
+            <div class="font-pixel" style="font-size: 1.5rem; line-height: 1.4; color: #5d4a37;">
+                <p style="margin-bottom: 1rem; color: var(--y2k-accent);">Date: 15/4/2026</p>
+                <p style="margin-bottom: 1rem;">DEAREST CLARE,</p>
+                <p style="margin-bottom: 1rem;">I HOPE THIS DIGITAL BIRTHDAY PACKAGE FINDS YOU WELL. IN A WORLD THAT MOVES SO FAST, I WANTED TO SHARE THIS GIFT OF NOSTALGIA TO YOU</p>
+                <p style="margin-bottom: 1rem;">INSIDE, YOU'LL FIND A FEW THINGS: A CASETTE TAPE OF SONGS THAT REMIND ME OF YOU, A SMALL AMOUNT OF DUIT RAYA, AND THIS NOTE.</p>
+                <br>
+                <p style="margin-bottom: 2rem;">HAPPY BIRTHDAY MY DEAREST FRIEND. MAY YOUR DAY BE FILLED WITH WARMTH AND GENTLE MOMENTS.</p>
+                <p style="text-align: right; font-weight: 600; color: var(--y2k-accent);">YOUR DUMMY, <br>H</p>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--y2k-accent)" stroke="var(--y2k-accent)" stroke-width="2" class="bounce"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </div>
+        </div>
+    </div>
+
+    <div id="packet-modal" class="modal-overlay hidden" onclick="hideModal('packet')">
+        <div class="modal-content raya-packet-modal" onclick="event.stopPropagation()">
+            <button class="close-btn" style="color: #fbbf24;" onclick="hideModal('packet')">&times;</button>
+            <h2 class="font-pixel" style="font-size: 1.8rem; letter-spacing: 2px;">SELAMAT HARI RAYA</h2>
+            <div class="qr-placeholder">
+                <img src="duitraya.jpeg" alt="QR Code">
+            </div>
+            <p class="font-serif" style="font-style: italic; margin-bottom: 1rem;">"Maaf Zahir dan Batin. I byk salah dengan you.<br>I hope your Raya will be filled with blessings."</p>
+            <a href="https://links.tngdigital.com.my/moneypacket/aiqBGz6HyoGsdoKSU6F7" target="_blank" class="btn-claim">CLAIM</a>
+        </div>
+    </div>
+
+    <script>
+        // Audio Logic
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.log('Audio not supported or blocked');
+            }
+        }
+
+        function playPaperSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const bufferSize = audioCtx.sampleRate * 0.2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                filter.Q.setValueAtTime(0.5, audioCtx.currentTime);
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+
+                noise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                noise.start();
+                noise.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {}
+        }
+
+        function playCoinSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const playTone = (freq, delay, duration, vol) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                    gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + delay);
+                    osc.stop(audioCtx.currentTime + delay + duration);
+                };
+
+                playTone(880, 0, 0.1, 0.1);
+                playTone(1760, 0.05, 0.15, 0.08);
+            } catch (e) {}
+        }
+
+        function playUnwrapSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const duration = 0.5;
+                const bufferSize = audioCtx.sampleRate * duration;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    // White noise with a decay envelope for a "crinkle" effect
+                    const envelope = Math.pow(1 - i / bufferSize, 2);
+                    data[i] = (Math.random() * 2 - 1) * envelope;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(2000, audioCtx.currentTime);
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+                noise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                noise.start();
+            } catch (e) {}
+        }
+
+        // State Management
+        function openBox() {
+            playUnwrapSound();
+            document.getElementById('gift-container').classList.add('hidden');
+            document.getElementById('treasures').classList.remove('hidden');
+        }
+
+        function resetBox() {
+            document.getElementById('gift-container').classList.remove('hidden');
+            document.getElementById('treasures').classList.add('hidden');
+            // Reset Cassette
+            const player = document.getElementById('cassette-player');
+            const tape = document.getElementById('cassette-tape');
+            const reelL = document.getElementById('reel-left');
+            const reelR = document.getElementById('reel-right');
+            const playBtn = document.getElementById('play-btn');
+            
+            player.classList.remove('inserted');
+            reelL.classList.remove('spinning');
+            reelR.classList.remove('spinning');
+            playBtn.disabled = true;
+            playBtn.classList.remove('glow');
+            document.getElementById('cassette-placeholder').classList.remove('hidden');
+            isPlaying = false;
+            isTapeInserted = false;
+            updatePlayIcons();
+        }
+
+        function showModal(id) {
+            if (id === 'letter') playPaperSound();
+            if (id === 'packet') playCoinSound();
+            document.getElementById(id + '-modal').classList.remove('hidden');
+        }
+
+        function hideModal(id) {
+            document.getElementById(id + '-modal').classList.add('hidden');
+        }
+
+        // Cassette Player Logic
+        let isTapeInserted = false;
+        let isPlaying = false;
+
+        function insertCassette() {
+            if (isTapeInserted) return;
+            
+            playClickSound();
+            
+            const player = document.getElementById('cassette-player');
+            const playBtn = document.getElementById('play-btn');
+            const placeholder = document.getElementById('cassette-placeholder');
+            
+            isTapeInserted = true;
+            player.classList.add('inserted');
+            playBtn.disabled = false;
+            playBtn.classList.add('glow');
+            placeholder.classList.add('hidden');
+        }
+
+        function togglePlay() {
+            if (!isTapeInserted) return;
+            
+            isPlaying = !isPlaying;
+            const reelL = document.getElementById('reel-left');
+            const reelR = document.getElementById('reel-right');
+            if (isPlaying) {
+                reelL.classList.add('spinning');
+                reelR.classList.add('spinning');
+                setTimeout(() => {
+                    window.open('https://open.spotify.com/playlist/12cfMZn0PV9JCAqwysO7nz?si=6fe1f97fd6394c48', '_blank');
+                }, 1000);
+            } else {
+                reelL.classList.remove('spinning');
+                reelR.classList.remove('spinning');
+            }
+            updatePlayIcons();
+        }
+
+        function updatePlayIcons() {
+            document.getElementById('play-icon').classList.toggle('hidden', isPlaying);
+            document.getElementById('pause-icon').classList.toggle('hidden', !isPlaying);
+        }
+    </script>
+</body>
+</html>

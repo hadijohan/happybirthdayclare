@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=VT323&family=Inter:wght@400;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-pixel: "VT323", monospace;
+  --font-sans: "Inter", sans-serif;
+}
+
+:root {
+  --cottage-cream: #fdfcf0;
+  --cottage-rose: #e8a798;
+  --y2k-cyan: #00f2ff;
+  --y2k-pink: #ff8585;
+  --y2k-silver: #c0c0c0;
+}
+
+body {
+  background-color: var(--cottage-cream);
+  color: #4a3728;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+}
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.iridescent {
+  background: linear-gradient(
+    45deg,
+    #ff00ea 0%,
+    #00f2ff 25%,
+    #ff00ea 50%,
+    #00f2ff 75%,
+    #ff00ea 100%
+  );
+  background-size: 400% 400%;
+  animation: iridescent-shift 10s ease infinite;
+}
+
+@keyframes iridescent-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.pixel-shadow {
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.floral-pattern {
+  background-image: radial-gradient(#e8a798 1px, transparent 1px);
+  background-size: 20px 20px;
+}
